@@ -82,6 +82,8 @@ before_script:
 
   # Install chromium and chromedriver
   - if [[ $BEHAT_TEST ]]; then sudo apt-get install -y chromium-browser chromium-chromedriver; fi
+  - if [[ $BEHAT_TEST ]]; then chromium --version; fi
+  - if [[ $BEHAT_TEST ]]; then chromedriver --version; fi
 
   # PHPENV
   - phpenv rehash
@@ -192,11 +194,11 @@ script:
   - if [[ "$PHPUNIT_TEST" != "" && "$PHPUNIT_SUITE" != "" ]]; then vendor/bin/phpunit --fail-on-warning --testsuite $PHPUNIT_SUITE; fi
 
   # PHPUNIT_COVERAGE
-  - if [[ "$PHPUNIT_COVERAGE_TEST" != "" && "$PHPUNIT_COVERAGE_SUITE" == "" ]]; then phpdbg -qrr vendor/bin/phpunit --fail-on-warning --testdox --coverage-clover=coverage.xml; fi
+  - if [[ "$PHPUNIT_COVERAGE_TEST" != "" && "$PHPUNIT_COVERAGE_SUITE" == "" ]]; then phpdbg -qrr vendor/bin/phpunit tests/Schema/IntegrationTest.php --fail-on-warning --testdox --coverage-clover=coverage.xml; fi
   - if [[ "$PHPUNIT_COVERAGE_TEST" != "" && "$PHPUNIT_COVERAGE_SUITE" != "" ]]; then phpdbg -qrr vendor/bin/phpunit --fail-on-warning --testdox --testsuite $PHPUNIT_COVERAGE_SUITE --coverage-clover=coverage.xml; fi
 
   # BEHAT
-  - if [[ $BEHAT_TEST ]]; then vendor/bin/behat $BEHAT_SUITE; fi
+  - if [[ $BEHAT_TEST ]]; then vendor/bin/behat --name="I can limit edit permissions to admins" ; fi
 
   # PHPCS
   - if [[ $PHPCS_TEST && -f phpcs.xml.dist ]]; then vendor/bin/phpcs; fi
